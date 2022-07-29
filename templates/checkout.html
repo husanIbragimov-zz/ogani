@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <section class="hero hero-normal">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="hero__categories">
+                        <div class="hero__categories__all">
+                            <i class="fa fa-bars"></i>
+                            <span>All categories</span>
+                        </div>
+                        <ul>
+                            {% for category in categories %}
+                                <li><a href="/blog/?cat={{ category }}">{{ category }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="hero__search">
+                        <div class="hero__search__form">
+                            <form action="/shop/">
+                                <div class="hero__search__categories">
+                                    All Categories
+                                    <span class="arrow_carrot-down"></span>
+                                </div>
+                                <input type="search" name="search" placeholder="What do yo u need?">
+                                <button type="submit" class="site-btn">SEARCH</button>
+                            </form>
+                        </div>
+                        <div class="hero__search__phone">
+                            <div class="hero__search__phone__icon">
+                                <i class="fa fa-phone"></i>
+                            </div>
+                            <div class="hero__search__phone__text">
+                                <h5>+65 11.188.888</h5>
+                                <span>support 24/7 time</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>Checkout</h2>
+                        <div class="breadcrumb__option">
+                            <a href="/">Home</a>
+                            <span>Checkout</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="checkout spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h6><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click here</a> to enter your code
+                    </h6>
+                </div>
+            </div>
+            {% if not messages %}
+                <div class="checkout__form">
+                    <h4>Billing Details</h4>
+                    <form action="#" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-lg-8 col-md-6">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="checkout__input">
+                                            <p>Fist Name<span>*</span></p>
+                                            <input disabled type="text"
+                                                   value="
+                                                           {% if request.user.first_name %}{{ request.user.first_name }}{% endif %}">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="checkout__input">
+                                            <p>Last Name<span>*</span></p>
+                                            <input disabled type="text"
+                                                   value="
+                                                           {% if request.user.last_name %}{{ request.user.last_name }}{% endif %}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="checkout__input">
+                                    <p>Address<span>*</span></p>
+                                    {#                                <input type="text" placeholder="Street Address" class="checkout__input__add">#}
+                                    {{ form.address }}
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="checkout__input">
+                                            <p>Phone<span>*</span></p>
+                                            {#                                        <input type="text">#}
+                                            {{ form.phone }}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="checkout__input">
+                                            <p>Email<span>*</span></p>
+                                            <input disabled type="text" value="{% if request.user.email %}{{ request.user.email }}{% endif %}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="checkout__input">
+                                    <p>Order notes<span>*</span></p>
+                                    {{ form.note }}
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6">
+                                <div class="checkout__order">
+                                    <h4>Your Order</h4>
+                                    <div class="checkout__order__products">Products <span>Total</span></div>
+                                    <ul>
+                                        {% for item in cart.cart_items.all %}
+                                            <li>{{ item.product.name }} <span>UZS {{ item.get_total }}</span></li>
+                                        {% endfor %}
+                                    </ul>
+                                    <div class="checkout__order__subtotal">Subtotal
+                                        <span>UZS {{ cart.get_cart_total }}</span></div>
+                                    <div class="checkout__order__total">Total <span>UZS {{ cart.get_cart_total }}</span>
+                                    </div>
+                                    <div class="checkout__input__checkbox">
+                                        <label for="payment">
+                                            CRASH
+                                            <input type="checkbox" id="payment" checked disabled>
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                    <button type="submit" class="site-btn">PLACE ORDER</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            {% else %}
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </section>
+
+
+{% endblock %}
